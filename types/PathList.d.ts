@@ -1,3 +1,6 @@
+import { Environment } from "@rdfjs/environment/Environment";
+import { DatasetCore, Quad, Term } from "@rdfjs/types";
+
 export default PathList;
 /**
  * List of paths
@@ -12,14 +15,16 @@ declare class PathList {
      * @param {Term[]} terms Terms for the pointers
      * @param {Term[]} graphs Graphs for the pointers
      */
-    constructor({ dataset, factory, ptrs, terms, graphs }: DatasetCore);
+    constructor({ dataset, factory, ptrs, terms, graphs }: { dataset: DatasetCore, factory: Environment<unknown>, ptrs: PathList[], terms: Term[], graphs: Term[] });
     factory: DatasetCore;
-    ptrs: DatasetCore[];
+    ptrs: {
+        dataset: DatasetCore
+    }[];
     /**
      * Dataset of the pointer or null if there is no unique dataset.
      * @returns {DatasetCore|null} Unique dataset or null
      */
-    get dataset(): any;
+    get dataset(): DatasetCore | null;
     /**
      * An array of all datasets of all pointers.
      * @returns {DatasetCore[]} Array of datasets.
@@ -73,7 +78,7 @@ declare class PathList {
      * @param args Additional arguments for the constructor
      * @returns {Constructor} Cloned instance
      */
-    clone(args: any): Constructor;
+    clone(args: any): this;
     /**
      * Delete quads with the current terms as the object.
      * @param {Term[]} predicates Predicates of the quads
@@ -99,46 +104,46 @@ declare class PathList {
      * The path of the pointers is trimmed.
      * @returns {Constructor} Instance with unique pointers
      */
-    distinct(): Constructor;
+    distinct(): this;
     /**
      * Executes a single instruction.
      * @param instruction The instruction to execute
      * @returns {Constructor} Instance with the result pointers.
      */
-    execute(instruction: any): Constructor;
+    execute(instruction: any): this;
     /**
      * Executes an array of instructions.
      * @param instruction The instructions to execute
      * @returns {Constructor} Instance with the result pointers.
      */
-    executeAll(instructions: any): Constructor;
+    executeAll(instructions: any): this;
     /**
      * Filter the pointers based on the result of the given callback function.
      * @param callback
      * @returns {Constructor} Instance with the filtered pointers.
      */
-    filter(callback: any): Constructor;
+    filter(callback: (pointer: this) => boolean): this;
     /**
      * Filter the pointers based on matching quad(s) with the current terms as the object.
      * @param {Term[]} predicates Predicates of the quads
      * @param {Term[]} subjects Subjects of the quads
      * @returns {Constructor} Instance that contains only the filtered pointers
      */
-    hasIn(predicates: Term[], subjects: Term[]): Constructor;
+    hasIn(predicates: Term[], subjects: Term[]): this;
     /**
      * Filter the pointers based on matching quad(s) with the current terms as the subject.
      * @param {Term[]} predicates Predicates of the quads
      * @param {Term[]} objects Objects of the quads
      * @returns {Constructor} Instance that contains only the filtered pointers
      */
-    hasOut(predicates: Term[], objects: Term[]): Constructor;
+    hasOut(predicates: Term[], objects: Term[]): this;
     /**
      * Traverse the graph with the current terms as the object.
      * @param {Term[]} predicates Predicates of the quads
      * @param {Term[]} subjects Subjects of the quads
      * @returns {Constructor} Instance with pointers of the traversed target terms
      */
-    in(predicates: Term[], subjects: Term[]): Constructor;
+    in(predicates: Term[], subjects: Term[]): this;
     /**
      * Check if any pointer is an any-pointer.
      * @returns {boolean} True if any any-pointer was found
@@ -153,7 +158,7 @@ declare class PathList {
      * Create an iterator for the list if the instance is a list; otherwise, return undefined.
      * @returns {Iterator<Constructor>|undefined} Iterator or undefined
      */
-    list(): Iterator<Constructor> | undefined;
+    list(): Iterator<this> | undefined;
     /**
      * Map each pointer using the given callback function.
      * @param callback
@@ -165,27 +170,27 @@ declare class PathList {
      * @param terms Array of terms for the pointers
      * @returns {Constructor} Instance with pointers of the given terms
      */
-    node(terms: any): Constructor;
+    node(terms: any): this;
     /**
      * Traverse the graph with the current terms as the subject.
      * @param {Term[]} predicates Predicates of the quads
      * @param {Term[]} objects Objects of the quads
      * @returns {Constructor} Instance with pointers of the traversed target terms
      */
-    out(predicates: Term[], objects: Term[]): Constructor;
+    out(predicates: Term[], objects: Term[]): this;
     /**
      * Create an iterator of all quads of all pointer paths.
      * @returns {Iterator<Quad>} Iterator for the quads
      */
-    quads(): Iterator<Quad>;
+    quads(): Quad[];
     /**
      * Trim the path of all pointers and create a new instance for the result.
      * @returns {Constructor} Instance of the trimmed pointers
      */
-    trim(): Constructor;
+    trim(): this;
     /**
      * Iterator for each pointer wrapped into a new instance.
-     * @returns {Iterator<Constructor>}} Iterator for the wrapped pointers
+     * @returns {Iterator<this>}} Iterator for the wrapped pointers
      */
-    [Symbol.iterator](): Iterator<Constructor>;
+    [Symbol.iterator](): Iterator<this>;
 }

@@ -5,9 +5,16 @@
   "type": "module",
   "main": "index.js",
   "exports": {
-    "default": "./index.js",
-    "import": "./index.js",
-    "types": "./types/index.d.ts"
+    ".": {
+      "default": "./index.js",
+      "import": "./index.js",
+      "types": "./types/index.d.ts"
+    },
+    "./PathList.js": {
+      "default": "./PathList.js",
+      "import": "./PathList.js",
+      "types": "./types/PathList.d.ts"
+    }
   },
   "scripts": {
     "test": "stricter-standard && c8 --reporter=lcov --reporter=text-summary mocha",
